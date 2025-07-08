@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Name Spinner</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            transition: transform 3s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .segment-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            transform-origin: center;
+            white-space: nowrap;
+        }
+
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #ff4444;
+            z-index: 15;
+        }
+
+        .controls {
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .student-management {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .student-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .student-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .input-container {
+            margin: 15px 0;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            width: 200px;
+            margin-right: 10px;
+            outline: none;
+        }
+
+        .add-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selected {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Student Name Spinner</h1>
+        
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel" id="wheel"></div>
+            <div class="wheel-center">🎲</div>
+        </div>
+
+        <div class="controls">
+            <button id="spinBtn" onclick="spin()">SPIN THE WHEEL!</button>
+            <button id="resetBtn" onclick="resetStudents()">Reset All Students</button>
+        </div>
+
+        <div class="result" id="result">
+            Click "SPIN THE WHEEL!" to select a student
+        </div>
+
+        <div class="student-management">
+            <h3>Manage Students</h3>
+            <div class="input-container">
+                <input type="text" id="studentInput" placeholder="Enter student name" onkeypress="handleKeyPress(event)">
+                <button class="add-btn" onclick="addStudent()">Add Student</button>
+            </div>
+            <div class="student-list" id="studentList"></div>
+        </div>
+    </div>
+
+    <script>
+        let students = [
+            'Emma', 'Liam', 'Olivia', 'Noah', 'Ava', 'Ethan', 'Sophia', 'Mason',
+            'Isabella', 'William', 'Mia', 'James', 'Charlotte', 'Alexander', 'Amelia'
+        ];
+
+        let originalStudents = [...students];
+        let spinning = false;
+
+        const colors = [
+            '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd',
+            '#98d8c8', '#f7dc6f', '#bb8fce', '#85c1e9', '#f8c471', '#82e0aa',
+            '#f1948a', '#85c1e9', '#f4d03f', '#a569bd', '#5dade2', '#58d68d'
+        ];
+
+        function createWheel() {
+            const wheel = document.getElementById('wheel');
+            wheel.innerHTML = '';
+            
+            if (students.length === 0) {
+                wheel.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; background: #666; border-radius: 50%; font-size: 18px;">No students left!</div>';
+                return;
+            }
+
+            const segmentAngle = 360 / students.length;
+            
+            students.forEach((student, index) => {
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.style.background = colors[index % colors.length];
+                segment.style.transform = `rotate(${index * segmentAngle}deg)`;
+                
+                // Create text element
+                const textElement = document.createElement('div');
+                textElement.className = 'segment-text';
+                textElement.textContent = student;
+                
+                // Position text in the middle of the segment
+                const textAngle = (index * segmentAngle) + (segmentAngle / 2);
+                const radius = 120; // Distance from center
+                const x = Math.cos((textAngle - 90) * Math.PI / 180) * radius;
+                const y = Math.sin((textAngle - 90) * Math.PI / 180) * radius;
+                
+                textElement.style.position = 'absolute';
+                textElement.style.left = '50%';
+                textElement.style.top = '50%';
+                textElement.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${textAngle}deg)`;
+                textElement.style.fontSize = students.length > 12 ? '12px' : '14px';
+                
+                segment.appendChild(textElement);
+                wheel.appendChild(segment);
+            });
+
+            updateStudentList();
+        }
+
+        function updateStudentList() {
+            const studentList = document.getElementById('studentList');
+            studentList.innerHTML = '';
+            
+            students.forEach(student => {
+                const tag = document.createElement('div');
+                tag.className = 'student-tag';
+                tag.textContent = student;
+                studentList.appendChild(tag);
+            });
+
+            // Update button states
+            document.getElementById('spinBtn').disabled = students.length === 0;
+        }
+
+        function spin() {
+            if (spinning || students.length === 0) return;
+            
+            spinning = true;
+            const spinBtn = document.getElementById('spinBtn');
+            const result = document.getElementById('result');
+            
+            spinBtn.disabled = true;
+            result.textContent = 'Spinning...';
+            
+            // Calculate random rotation
+            const minSpins = 5;
+            const maxSpins = 8;
+            const spins = Math.random() * (maxSpins - minSpins) + minSpins;
+            const finalRotation = spins * 360;
+            
+            // Add random offset
+            const randomOffset = Math.random() * 360;
+            const totalRotation = finalRotation + randomOffset;
+            
+            // Apply rotation
+            const wheel = document.getElementById('wheel');
+            wheel.style.transform = `rotate(${totalRotation}deg)`;
+            
+            // Calculate which student was selected
+            const segmentAngle = 360 / students.length;
+            const normalizedAngle = (360 - (totalRotation % 360)) % 360;
+            const selectedIndex = Math.floor(normalizedAngle / segmentAngle);
+            const selectedStudent = students[selectedIndex];
+            
+            // Show result after animation
+            setTimeout(() => {
+                result.innerHTML = `<span class="selected">🎉 ${selectedStudent} 🎉</span>`;
+                
+                // Remove student from list
+                students.splice(selectedIndex, 1);
+                
+                // Recreate wheel without the selected student
+                setTimeout(() => {
+                    createWheel();
+                    spinning = false;
+                    spinBtn.disabled = students.length === 0;
+                    
+                    if (students.length === 0) {
+                        result.innerHTML = '<span class="selected">🎊 All students have been selected! 🎊</span>';
+                    }
+                }, 1000);
+                
+            }, 3000);
+        }
+
+        function addStudent() {
+            const input = document.getElementById('studentInput');
+            const name = input.value.trim();
+            
+            if (name && !students.includes(name)) {
+                students.push(name);
+                originalStudents.push(name);
+                input.value = '';
+                createWheel();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                addStudent();
+            }
+        }
+
+        function resetStudents() {
+            students = [...originalStudents];
+            document.getElementById('result').textContent = 'Click "SPIN THE WHEEL!" to select a student';
+            document.getElementById('wheel').style.transform = 'rotate(0deg)';
+            createWheel();
+        }
+
+        // Initialize the wheel
+        createWheel();
+    </script>
+</body>
+</html>
