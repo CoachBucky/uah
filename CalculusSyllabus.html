@@ -13,9 +13,15 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
             min-height: 100vh;
             color: #333;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
         }
 
         .container {
@@ -34,6 +40,12 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .header {
+            background: rgba(30, 30, 30, 0.95);
+            color: #e0e0e0;
         }
 
         .header::before {
@@ -43,8 +55,12 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            background: linear-gradient(45deg, transparent, rgba(220, 20, 60, 0.1), transparent);
             animation: shine 3s infinite;
+        }
+
+        body.dark-mode .header::before {
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
         }
 
         @keyframes shine {
@@ -60,6 +76,10 @@
             z-index: 1;
         }
 
+        body.dark-mode .header h1 {
+            color: #e0e0e0;
+        }
+
         .header .teacher-info {
             font-size: 1.1rem;
             color: #7f8c8d;
@@ -68,12 +88,42 @@
             z-index: 1;
         }
 
+        body.dark-mode .header .teacher-info {
+            color: #b0b0b0;
+        }
+
         .nav-menu {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-bottom: 30px;
             flex-wrap: wrap;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background: rgba(30, 30, 30, 0.9);
+            color: #e0e0e0;
         }
 
         .nav-btn {
@@ -89,15 +139,29 @@
             overflow: hidden;
         }
 
+        body.dark-mode .nav-btn {
+            background: rgba(50, 50, 50, 0.9);
+            color: #e0e0e0;
+        }
+
         .nav-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             background: rgba(255, 255, 255, 1);
         }
 
+        body.dark-mode .nav-btn:hover {
+            background: rgba(70, 70, 70, 1);
+        }
+
         .nav-btn.active {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #DC143C, #8B0000);
             color: white;
+        }
+
+        body.dark-mode .nav-btn.active {
+            background: linear-gradient(45deg, #444, #666);
+            color: #e0e0e0;
         }
 
         .content-section {
@@ -109,6 +173,12 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             display: none;
             animation: slideIn 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .content-section {
+            background: rgba(30, 30, 30, 0.95);
+            color: #e0e0e0;
         }
 
         .content-section.active {
@@ -130,9 +200,14 @@
             font-size: 1.8rem;
             color: #2c3e50;
             margin-bottom: 20px;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #DC143C;
             padding-bottom: 10px;
             position: relative;
+        }
+
+        body.dark-mode .section-title {
+            color: #e0e0e0;
+            border-bottom: 3px solid #8B0000;
         }
 
         .section-title::after {
@@ -142,17 +217,27 @@
             left: 0;
             width: 50px;
             height: 3px;
-            background: #764ba2;
+            background: #8B0000;
+        }
+
+        body.dark-mode .section-title::after {
+            background: #DC143C;
         }
 
         .expectation-card {
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #DC143C;
             padding: 20px;
             margin: 15px 0;
             border-radius: 0 15px 15px 0;
             transition: all 0.3s ease;
             cursor: pointer;
+        }
+
+        body.dark-mode .expectation-card {
+            background: linear-gradient(45deg, #2a2a2a, #3a3a3a);
+            border-left: 4px solid #8B0000;
+            color: #e0e0e0;
         }
 
         .expectation-card:hover {
@@ -166,6 +251,10 @@
             font-size: 1.2rem;
         }
 
+        body.dark-mode .expectation-card h3 {
+            color: #e0e0e0;
+        }
+
         .resource-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -174,7 +263,7 @@
         }
 
         .resource-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #DC143C, #8B0000);
             color: white;
             padding: 20px;
             border-radius: 15px;
@@ -182,6 +271,10 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+        }
+
+        body.dark-mode .resource-card {
+            background: linear-gradient(135deg, #444, #666);
         }
 
         .resource-card::before {
@@ -220,13 +313,17 @@
         .grade-item {
             text-align: center;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #DC143C, #8B0000);
             color: white;
             border-radius: 15px;
             margin: 10px;
             flex: 1;
             min-width: 150px;
             transition: all 0.3s ease;
+        }
+
+        body.dark-mode .grade-item {
+            background: linear-gradient(135deg, #444, #666);
         }
 
         .grade-item:hover {
@@ -245,11 +342,17 @@
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid #667eea;
+            border: 2px solid #DC143C;
+        }
+
+        body.dark-mode .contact-info {
+            background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+            border: 2px solid #8B0000;
+            color: #e0e0e0;
         }
 
         .highlight {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #DC143C, #8B0000);
             color: white;
             padding: 15px;
             border-radius: 10px;
@@ -257,9 +360,13 @@
             font-weight: 600;
         }
 
+        body.dark-mode .highlight {
+            background: linear-gradient(45deg, #444, #666);
+        }
+
         .interactive-element {
-            background: rgba(102, 126, 234, 0.1);
-            border: 2px dashed #667eea;
+            background: rgba(220, 20, 60, 0.1);
+            border: 2px dashed #DC143C;
             border-radius: 10px;
             padding: 15px;
             margin: 10px 0;
@@ -268,9 +375,19 @@
             transition: all 0.3s ease;
         }
 
+        body.dark-mode .interactive-element {
+            background: rgba(139, 0, 0, 0.1);
+            border: 2px dashed #8B0000;
+            color: #e0e0e0;
+        }
+
         .interactive-element:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: rgba(220, 20, 60, 0.2);
             border-style: solid;
+        }
+
+        body.dark-mode .interactive-element:hover {
+            background: rgba(139, 0, 0, 0.2);
         }
 
         .progress-bar {
@@ -282,10 +399,14 @@
         }
 
         .progress-fill {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(45deg, #DC143C, #8B0000);
             height: 100%;
             width: 0%;
             transition: width 2s ease-in-out;
+        }
+
+        body.dark-mode .progress-fill {
+            background: linear-gradient(45deg, #666, #888);
         }
 
         .collapsible {
@@ -296,6 +417,11 @@
             overflow: hidden;
         }
 
+        body.dark-mode .collapsible {
+            background: #2a2a2a;
+            border: 1px solid #555;
+        }
+
         .collapsible-header {
             background: #e9ecef;
             padding: 15px;
@@ -304,8 +430,17 @@
             transition: all 0.3s ease;
         }
 
+        body.dark-mode .collapsible-header {
+            background: #3a3a3a;
+            color: #e0e0e0;
+        }
+
         .collapsible-header:hover {
             background: #dee2e6;
+        }
+
+        body.dark-mode .collapsible-header:hover {
+            background: #4a4a4a;
         }
 
         .collapsible-content {
@@ -313,6 +448,10 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+        }
+
+        body.dark-mode .collapsible-content {
+            color: #e0e0e0;
         }
 
         .collapsible-content.active {
@@ -347,6 +486,10 @@
 </head>
 <body>
     <div class="container">
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+            🌙
+        </button>
+        
         <div class="header">
             <h1>AP Calculus AB</h1>
             <div class="teacher-info">
@@ -623,6 +766,22 @@
     </div>
 
     <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+            
+            body.classList.toggle('dark-mode');
+            
+            // Update toggle button icon
+            if (body.classList.contains('dark-mode')) {
+                darkModeToggle.textContent = '☀️';
+                darkModeToggle.title = 'Switch to Light Mode';
+            } else {
+                darkModeToggle.textContent = '🌙';
+                darkModeToggle.title = 'Switch to Dark Mode';
+            }
+        }
+
         function showSection(sectionId) {
             // Hide all sections
             const sections = document.querySelectorAll('.content-section');
