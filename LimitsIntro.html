@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Limits in Calculus</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .lesson-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+        }
+        
+        .vocab-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .vocab-term {
+            font-weight: bold;
+            color: #fdcb6e;
+            margin-right: 10px;
+        }
+        
+        .example-box {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #28a745;
+        }
+        
+        .visual-demo {
+            background: #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: white;
+            text-align: center;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        canvas {
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            background: white;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-container {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .question {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .options {
+            margin: 15px 0;
+        }
+        
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            cursor: pointer;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background: #f8f9fa;
+            border-color: #3498db;
+        }
+        
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .option.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #229954;
+        }
+        
+        .option.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+        
+        .score-display {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        th {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .animation-info {
+            background: #17a2b8;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="lesson-container">
+        <h1>📊 Introduction to Limits in Calculus</h1>
+        
+        <h2>🎯 Learning Objectives</h2>
+        <p>By the end of this lesson, students will be able to:</p>
+        <ul>
+            <li>Understand the concept of a limit and its mathematical notation</li>
+            <li>Distinguish between one-sided and two-sided limits</li>
+            <li>Determine limits from graphs and tables of values</li>
+            <li>Apply limit concepts to analyze function behavior</li>
+        </ul>
+        
+        <h2>📚 Key Vocabulary</h2>
+        <div class="vocab-box">
+            <p><span class="vocab-term">Limit:</span> The value that a function approaches as the input approaches a particular value.</p>
+            <p><span class="vocab-term">Left-hand limit:</span> The limit as x approaches a value from the left (negative direction).</p>
+            <p><span class="vocab-term">Right-hand limit:</span> The limit as x approaches a value from the right (positive direction).</p>
+            <p><span class="vocab-term">Two-sided limit:</span> A limit that exists when both left-hand and right-hand limits exist and are equal.</p>
+            <p><span class="vocab-term">Continuity:</span> A function is continuous at a point if the limit equals the function value at that point.</p>
+            <p><span class="vocab-term">Discontinuity:</span> A break or gap in a function where the limit may not exist or may not equal the function value.</p>
+        </div>
+        
+        <h2>🔍 What is a Limit?</h2>
+        <p>A <strong>limit</strong> describes the behavior of a function as the input gets arbitrarily close to a particular value. We write this as:</p>
+        <div class="example-box">
+            <p style="text-align: center; font-size: 1.3em;"><strong>lim<sub>x→a</sub> f(x) = L</strong></p>
+            <p>This reads: "The limit of f(x) as x approaches a equals L"</p>
+        </div>
+        
+        <p>The key insight is that we're interested in what happens <em>near</em> the point, not necessarily <em>at</em> the point. The function might not even be defined at x = a, but the limit can still exist!</p>
+        
+        <h2>🎨 Interactive Limit Visualization</h2>
+        <div class="visual-demo">
+            <h3>Explore How Limits Work</h3>
+            <div class="animation-info" id="animationInfo">
+                Click "Start Animation" to see how function values approach the limit as x approaches 2
+            </div>
+            <canvas id="limitCanvas" width="800" height="400"></canvas>
+            <div class="controls">
+                <button onclick="startAnimation()">Start Animation</button>
+                <button onclick="resetAnimation()">Reset</button>
+                <button onclick="toggleFunction()">Switch Function</button>
+            </div>
+            <p id="functionDisplay">Current function: f(x) = (x² - 4)/(x - 2)</p>
+        </div>
+        
+        <h2>📊 Understanding One-Sided Limits</h2>
+        <p>Sometimes we need to consider what happens when we approach a point from only one direction:</p>
+        
+        <h3>Left-Hand Limit</h3>
+        <div class="example-box">
+            <p><strong>lim<sub>x→a⁻</sub> f(x) = L</strong></p>
+            <p>This means x approaches a from values less than a (from the left on the number line).</p>
+        </div>
+        
+        <h3>Right-Hand Limit</h3>
+        <div class="example-box">
+            <p><strong>lim<sub>x→a⁺</sub> f(x) = L</strong></p>
+            <p>This means x approaches a from values greater than a (from the right on the number line).</p>
+        </div>
+        
+        <h3>Two-Sided Limit</h3>
+        <div class="example-box">
+            <p>A two-sided limit exists <strong>only when</strong> both one-sided limits exist and are equal:</p>
+            <p><strong>lim<sub>x→a</sub> f(x) = L</strong> if and only if <strong>lim<sub>x→a⁻</sub> f(x) = lim<sub>x→a⁺</sub> f(x) = L</strong></p>
+        </div>
+        
+        <h2>📈 Finding Limits from Tables</h2>
+        <p>We can estimate limits by examining function values as x gets closer to our target value:</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>x</th>
+                        <th>f(x) = (x² - 4)/(x - 2)</th>
+                        <th>Approaching from</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1.9</td>
+                        <td>3.9</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td>1.99</td>
+                        <td>3.99</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr>
+                        <td>1.999</td>
+                        <td>3.999</td>
+                        <td>Left</td>
+                    </tr>
+                    <tr style="background: #fff3cd;">
+                        <td>2</td>
+                        <td>undefined</td>
+                        <td>---</td>
+                    </tr>
+                    <tr>
+                        <td>2.001</td>
+                        <td>4.001</td>
+                        <td>Right</td>
+                    </tr>
+                    <tr>
+                        <td>2.01</td>
+                        <td>4.01</td>
+                        <td>Right</td>
+                    </tr>
+                    <tr>
+                        <td>2.1</td>
+                        <td>4.1</td>
+                        <td>Right</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="example-box">
+            <p><strong>Conclusion:</strong> As x approaches 2 from both sides, f(x) approaches 4.</p>
+            <p>Therefore: <span class="highlight">lim<sub>x→2</sub> f(x) = 4</span></p>
+        </div>
+        
+        <h2>📊 Reading Limits from Graphs</h2>
+        <p>When reading limits from graphs, follow these steps:</p>
+        <ol>
+            <li><strong>Identify the target x-value</strong> where you want to find the limit</li>
+            <li><strong>Trace from the left</strong> - what y-value does the function approach?</li>
+            <li><strong>Trace from the right</strong> - what y-value does the function approach?</li>
+            <li><strong>Compare the values</strong> - if they're equal, that's your limit!</li>
+        </ol>
+        
+        <div class="example-box">
+            <p><strong>Remember:</strong> The limit depends on what the function approaches, not what it equals at that point. A function can have a limit at a point even if:</p>
+            <ul>
+                <li>The function is undefined at that point</li>
+                <li>The function value is different from the limit</li>
+                <li>There's a hole or jump in the graph</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="quiz-container">
+        <h2>🧠 Formative Assessment Quiz</h2>
+        <div id="quiz"></div>
+        <div class="controls">
+            <button onclick="checkAnswers()">Check Answers</button>
+            <button onclick="resetQuiz()">Reset Quiz</button>
+        </div>
+        <div id="scoreDisplay" class="score-display" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Animation variables
+        let canvas = document.getElementById('limitCanvas');
+        let ctx = canvas.getContext('2d');
+        let animationId;
+        let currentFunction = 0;
+        let animationStep = 0;
+        let isAnimating = false;
+        
+        // Function definitions
+        const functions = [
+            {
+                name: "f(x) = (x² - 4)/(x - 2)",
+                evaluate: (x) => x === 2 ? undefined : (x * x - 4) / (x - 2),
+                targetX: 2,
+                targetY: 4,
+                description: "Removable discontinuity at x = 2"
+            },
+            {
+                name: "f(x) = |x - 2|/(x - 2)",
+                evaluate: (x) => x === 2 ? undefined : Math.abs(x - 2) / (x - 2),
+                targetX: 2,
+                targetY: undefined,
+                description: "Jump discontinuity at x = 2"
+            }
+        ];
+        
+        // Quiz questions
+        const quizQuestions = [
+            {
+                question: "What does lim<sub>x→3</sub> f(x) = 5 mean?",
+                options: [
+                    "f(3) = 5",
+                    "As x gets close to 3, f(x) gets close to 5",
+                    "x = 3 when f(x) = 5",
+                    "The function is continuous at x = 3"
+                ],
+                correct: 1
+            },
+            {
+                question: "If lim<sub>x→2⁻</sub> f(x) = 4 and lim<sub>x→2⁺</sub> f(x) = 7, what can we say about lim<sub>x→2</sub> f(x)?",
+                options: [
+                    "The limit equals 4",
+                    "The limit equals 7",
+                    "The limit equals 5.5",
+                    "The limit does not exist"
+                ],
+                correct: 3
+            },
+            {
+                question: "From the table showing f(1.9) = 3.8, f(1.99) = 3.98, f(2.01) = 4.02, f(2.1) = 4.2, what is lim<sub>x→2</sub> f(x)?",
+                options: [
+                    "2",
+                    "4",
+                    "undefined",
+                    "Cannot be determined"
+                ],
+                correct: 1
+            },
+            {
+                question: "A function can have a limit at a point even if:",
+                options: [
+                    "The function is undefined at that point",
+                    "The function value differs from the limit",
+                    "There's a hole in the graph at that point",
+                    "All of the above"
+                ],
+                correct: 3
+            },
+            {
+                question: "What is the notation for a left-hand limit as x approaches 5?",
+                options: [
+                    "lim<sub>x→5</sub> f(x)",
+                    "lim<sub>x→5⁺</sub> f(x)",
+                    "lim<sub>x→5⁻</sub> f(x)",
+                    "lim<sub>x→-5</sub> f(x)"
+                ],
+                correct: 2
+            }
+        ];
+        
+        function drawGrid() {
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 1;
+            
+            // Vertical lines
+            for (let x = 0; x <= 800; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, 400);
+                ctx.stroke();
+            }
+            
+            // Horizontal lines
+            for (let y = 0; y <= 400; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(800, y);
+                ctx.stroke();
+            }
+            
+            // Axes
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(400, 0);
+            ctx.lineTo(400, 400);
+            ctx.moveTo(0, 200);
+            ctx.lineTo(800, 200);
+            ctx.stroke();
+            
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('x', 780, 190);
+            ctx.fillText('y', 410, 20);
+            
+            // Origin
+            ctx.fillText('0', 390, 215);
+        }
+        
+        function plotFunction() {
+            const func = functions[currentFunction];
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            let firstPoint = true;
+            
+            for (let x = -10; x <= 10; x += 0.1) {
+                if (Math.abs(x - func.targetX) < 0.01) continue; // Skip the discontinuity
+                
+                const y = func.evaluate(x);
+                if (y !== undefined && !isNaN(y) && Math.abs(y) < 20) {
+                    const screenX = 400 + x * 40;
+                    const screenY = 200 - y * 40;
+                    
+                    if (firstPoint) {
+                        ctx.moveTo(screenX, screenY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(screenX, screenY);
+                    }
+                }
+            }
+            ctx.stroke();
+            
+            // Draw hole at discontinuity
+            if (func.targetY !== undefined) {
+                ctx.fillStyle = 'white';
+                ctx.strokeStyle = '#3498db';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(400 + func.targetX * 40, 200 - func.targetY * 40, 4, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+        
+        function animateLimit() {
+            if (!isAnimating) return;
+            
+            ctx.clearRect(0, 0, 800, 400);
+            drawGrid();
+            plotFunction();
+            
+            const func = functions[currentFunction];
+            const step = animationStep / 100;
+            const leftX = func.targetX - 0.5 + step * 0.5;
+            const rightX = func.targetX + 0.5 - step * 0.5;
+            
+            // Draw approaching points
+            const leftY = func.evaluate(leftX);
+            const rightY = func.evaluate(rightX);
+            
+            if (leftY !== undefined && !isNaN(leftY)) {
+                ctx.fillStyle = '#e74c3c';
+                ctx.beginPath();
+                ctx.arc(400 + leftX * 40, 200 - leftY * 40, 5, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw vertical line to show y-value
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(400 + leftX * 40, 200 - leftY * 40);
+                ctx.lineTo(400 + leftX * 40, 200);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            if (rightY !== undefined && !isNaN(rightY)) {
+                ctx.fillStyle = '#27ae60';
+                ctx.beginPath();
+                ctx.arc(400 + rightX * 40, 200 - rightY * 40, 5, 0, 2 * Math.PI);
+                ctx.fill();
+                
+                // Draw vertical line to show y-value
+                ctx.strokeStyle = '#27ae60';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(400 + rightX * 40, 200 - rightY * 40);
+                ctx.lineTo(400 + rightX * 40, 200);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            
+            // Update animation info
+            const infoElement = document.getElementById('animationInfo');
+            if (func.targetY !== undefined) {
+                infoElement.textContent = `Left: x = ${leftX.toFixed(3)}, f(x) = ${leftY.toFixed(3)} | Right: x = ${rightX.toFixed(3)}, f(x) = ${rightY.toFixed(3)}`;
+            } else {
+                infoElement.textContent = `Left: x = ${leftX.toFixed(3)}, f(x) = ${leftY.toFixed(3)} | Right: x = ${rightX.toFixed(3)}, f(x) = ${rightY.toFixed(3)} | Limit does not exist!`;
+            }
+            
+            animationStep += 1;
+            if (animationStep < 100) {
+                animationId = requestAnimationFrame(animateLimit);
+            } else {
+                isAnimating = false;
+                if (func.targetY !== undefined) {
+                    infoElement.textContent = `Animation complete! The limit as x approaches ${func.targetX} is ${func.targetY}`;
+                } else {
+                    infoElement.textContent = `Animation complete! The limit as x approaches ${func.targetX} does not exist (left ≠ right)`;
+                }
+            }
+        }
+        
+        function startAnimation() {
+            animationStep = 0;
+            isAnimating = true;
+            animateLimit();
+        }
+        
+        function resetAnimation() {
+            isAnimating = false;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            animationStep = 0;
+            
+            ctx.clearRect(0, 0, 800, 400);
+            drawGrid();
+            plotFunction();
+            
+            document.getElementById('animationInfo').textContent = 'Click "Start Animation" to see how function values approach the limit';
+        }
+        
+        function toggleFunction() {
+            currentFunction = (currentFunction + 1) % functions.length;
+            document.getElementById('functionDisplay').textContent = `Current function: ${functions[currentFunction].name}`;
+            resetAnimation();
+        }
+        
+        function createQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = '';
+            
+            quizQuestions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <h3>Question ${index + 1}</h3>
+                    <p>${q.question}</p>
+                    <div class="options">
+                        ${q.options.map((option, i) => `
+                            <label class="option" data-question="${index}" data-option="${i}">
+                                <input type="radio" name="q${index}" value="${i}" style="margin-right: 10px;">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+            
+            // Add click handlers for options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionNum = this.dataset.question;
+                    const optionNum = this.dataset.option;
+                    
+                    // Remove selected class from all options in this question
+                    document.querySelectorAll(`.option[data-question="${questionNum}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Check the radio button
+                    this.querySelector('input[type="radio"]').checked = true;
+                });
+            });
+        }
+        
+        function checkAnswers() {
+            let score = 0;
+            const total = quizQuestions.length;
+            
+            quizQuestions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+                const options = document.querySelectorAll(`.option[data-question="${index}"]`);
+                
+                options.forEach((option, i) => {
+                    option.classList.remove('correct', 'incorrect');
+                    if (i === q.correct) {
+                        option.classList.add('correct');
+                    } else if (selectedOption && parseInt(selectedOption.value) === i) {
+                        option.classList.add('incorrect');
+                    }
+                });
+                
+                if (selectedOption && parseInt(selectedOption.value) === q.correct) {
+                    score++;
+                }
+            });
+            
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            scoreDisplay.style.display = 'block';
+            scoreDisplay.innerHTML = `Your Score: ${score}/${total} (${Math.round(score/total*100)}%)`;
+        }
+        
+        function resetQuiz() {
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.getElementById('scoreDisplay').style.display = 'none';
+        }
+        
+        // Initialize
+        window.onload = function() {
+            drawGrid();
+            plotFunction();
+            createQuiz();
+        };
+    </script>
+</body>
+</html>
